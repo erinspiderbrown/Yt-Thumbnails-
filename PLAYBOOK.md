@@ -62,6 +62,22 @@ Single athlete or older-vs-younger contrast, one dramatic word:
 
 ---
 
+## Your benchmark creators: house styles to borrow
+Full breakdown in `references/creators/CREATORS.md`.
+
+| Video type | Borrow from | Thumbnail | Title formula |
+|---|---|---|---|
+| **Opinion / take** | The Final Leg | Giant tall condensed white caps across the top, athlete's head overlapping the text, one pro photo. Hook: "IS SHE HEALTHY?", "THERE'S A LOOPHOLE" | "What Everyone Missed About ___", "Is ___ Right About ___?", "Why EVERYONE Should Be Worried About ___" |
+| **Breaking news / drama** | Total Running Productionz | Action photo + 2–4 white words top-left ("THIS IS A PROBLEM") + one curved arrow | "[Name] Situation Is Crazy", "...Keeps Getting Crazier", "People Are Worried About [Name]" |
+| **Analysis / "how fast is this"** | Jumpman (3.7M, 2.4M, 2.1M views) | Real broadcast frame, little or no text, yellow line/circle drawn on the track | "I Don't Think You Understand Just HOW ___", "...Exposed a Huge Problem", "___ Finally Has A Serious Rival" |
+| **You in the video** | Trenton Sandler | Your real face (tired, skeptical, curious), lowercase one-word text ("ouch.") | First person: "I Tried ___", "Did ___ Make ___?" |
+
+**Main lesson:** none of these four use fake news graphics or "EXCLUSIVE"
+tags, and they still beat the clickbait channels. Pick ONE house thumbnail style
+(The Final Leg's is the easiest to template) so viewers recognise your videos.
+
+---
+
 ## Title formulas
 
 | Formula | Example from outliers | Use for |
