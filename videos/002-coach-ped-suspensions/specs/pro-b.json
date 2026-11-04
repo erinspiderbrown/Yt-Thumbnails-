@@ -1,0 +1,43 @@
+{
+  "out": "../pro-b.png",
+  "background": {
+    "photo": "../photos/coach.jpg",
+    "zoom": 1.2,
+    "blur": 16,
+    "darken": 0.6,
+    "desaturate": 0.6,
+    "tint": [
+      0,
+      20,
+      40
+    ],
+    "tint_amount": 0.2,
+    "vignette": 0.5
+  },
+  "subjects": [
+    {
+      "photo": "../photos/coach.jpg",
+      "cx": 0.76,
+      "bottom": 1.12,
+      "height": 1.08,
+      "outline": 5,
+      "outline_color": "lime"
+    }
+  ],
+  "text": [
+    {
+      "text": "WHO'S|TO|*BLAME?*",
+      "box": [
+        0.03,
+        0.04,
+        0.52,
+        0.98
+      ],
+      "max_size": 260,
+      "layer": "behind",
+      "valign": "center"
+    }
+  ],
+  "mark": false,
+  "tag": "ALLEGED"
+}

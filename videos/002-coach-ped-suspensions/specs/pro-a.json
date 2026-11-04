@@ -1,0 +1,52 @@
+{
+  "out": "../pro-a.png",
+  "background": {
+    "photo": "../photos/coach.jpg",
+    "zoom": 1.2,
+    "focus": [
+      0.5,
+      0.4
+    ],
+    "blur": 14,
+    "darken": 0.55,
+    "desaturate": 0.5,
+    "tint": [
+      110,
+      0,
+      0
+    ],
+    "tint_amount": 0.22,
+    "vignette": 0.5
+  },
+  "subjects": [
+    {
+      "photo": "../photos/coach.jpg",
+      "cx": 0.7,
+      "bottom": 1.1,
+      "height": 1.12,
+      "outline": 5,
+      "outline_color": "lime"
+    }
+  ],
+  "text": [
+    {
+      "text": "THIS IS|*BAD...*",
+      "box": [
+        0.035,
+        0.12,
+        0.44,
+        0.78
+      ],
+      "max_size": 230,
+      "valign": "top"
+    }
+  ],
+  "arrow": [
+    0.36,
+    0.5,
+    0.55,
+    0.3
+  ],
+  "bend": 0.35,
+  "tag": "ALLEGED"
+}

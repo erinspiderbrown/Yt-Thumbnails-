@@ -1,0 +1,64 @@
+{
+  "out": "../pro-c.png",
+  "background": {
+    "photo": "../photos/coach.jpg",
+    "zoom": 1.2,
+    "blur": 16,
+    "darken": 0.62,
+    "desaturate": 0.6,
+    "tint": [
+      110,
+      0,
+      0
+    ],
+    "tint_amount": 0.22,
+    "vignette": 0.55
+  },
+  "subjects": [
+    {
+      "photo": "../photos/athlete-2.jpg",
+      "hide": [
+        "0.5,0.145,0.065,0.11"
+      ],
+      "cx": 0.31,
+      "bottom": 1.0,
+      "height": 0.52,
+      "dim": 0.2,
+      "label": "SUSPENDED",
+      "label_y": 0.86
+    },
+    {
+      "photo": "../photos/athlete-1.jpg",
+      "hide": [
+        "0.49,0.29,0.12,0.115"
+      ],
+      "cx": 0.12,
+      "bottom": 1.04,
+      "height": 0.58,
+      "dim": 0.2,
+      "label": "SUSPENDED",
+      "label_y": 0.86
+    },
+    {
+      "photo": "../photos/coach.jpg",
+      "cx": 0.74,
+      "bottom": 1.1,
+      "height": 1.08,
+      "outline": 5,
+      "outline_color": "lime"
+    }
+  ],
+  "text": [
+    {
+      "text": "WHAT DID HE|*GIVE THEM?*",
+      "box": [
+        0.03,
+        0.07,
+        0.52,
+        0.38
+      ],
+      "max_size": 160
+    }
+  ],
+  "tag": "ALLEGED"
+}

@@ -1,6 +1,12 @@
 # Thumbnail styles
 
-**Default: `tools/signature_formats.py`.** Your three signature formats take the proven
+**Best results: `tools/pro_thumbnail.py`** (layered scenes). It cuts people out of their
+photos locally and pops them off a darkened, blurred background with a lime outline. You can
+put text behind the person for depth and add supporting people (e.g. pixelated athletes with
+SUSPENDED stamps). It's driven by a small JSON file per thumbnail; see
+`videos/002-coach-ped-suspensions/specs/` for three ready examples to copy.
+
+**Quick flat versions: `tools/signature_formats.py`.** Your three signature formats take the proven
 structure from your benchmark creators and give it your own look:
 
 | Format | Structure from | Use for |

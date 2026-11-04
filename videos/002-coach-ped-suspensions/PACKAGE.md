@@ -1,6 +1,19 @@
 # 002: High school coach allegedly gave athletes PEDs, two athletes suspended
 
-## ✅ Current versions: YOUR signature formats
+## ✅ Current versions: PRO layered thumbnails (best so far)
+Made with `tools/pro_thumbnail.py`: the coach is cut out of his photo (local model, pixels untouched),
+the background is darkened, blurred and tinted, and he gets the signature lime outline so he pops.
+Same signature text and colours as before.
+
+| File | Concept | Pair with title |
+|---|---|---|
+| `pro-c.png` (**FINAL**) | Coach + both athletes (faces pixelated, SUSPENDED stamps): the whole story in one look | **High School Coach Accused of Giving His Athletes PEDs, Now They're Suspended** |
+| `pro-b.png` (A/B partner) | Huge WHO'S TO BLAME? with the coach in front of the text | **Is The Coach Really To Blame for This PED Scandal?** |
+| `pro-a.png` | THIS IS BAD... + arrow | **This High School PED Situation Is Crazy** |
+
+Rebuild: `python ../../tools/pro_thumbnail.py specs/pro-c.json` (edit the JSON to change text or positions).
+
+## Previous: signature formats (flat photo)
 Same proven structure as your benchmark creators, with your own look: slanted Barlow font, hard
 shadow, lime key word, lime "//" mark, tapered lime arrow, black/lime news captions.
 
