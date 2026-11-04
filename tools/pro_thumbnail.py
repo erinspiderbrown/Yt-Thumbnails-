@@ -119,6 +119,31 @@ def place(canvas, sub, s):
     return canvas
 
 
+def place_prop(canvas, pr, base):
+    """Pre-cut RGBA image (e.g. an AI-generated object) with optional rotation, glow and shadow."""
+    im = Image.open(os.path.join(base, pr["image"])).convert("RGBA")
+    w = int(pr.get("width", 0.3) * W)
+    im = im.resize((w, int(im.height * w / im.width)), Image.LANCZOS)
+    if pr.get("rotate"):
+        im = im.rotate(pr["rotate"], expand=True, resample=Image.BICUBIC)
+    pad = 70  # room for glow/shadow so they aren't clipped into a rectangle
+    padded = Image.new("RGBA", (im.width + 2 * pad, im.height + 2 * pad), (0, 0, 0, 0))
+    padded.paste(im, (pad, pad))
+    im = padded
+    x = int(pr.get("cx", 0.5) * W - im.width / 2)
+    y = int(pr.get("cy", 0.8) * H - im.height / 2)
+    a = im.split()[3].point(lambda v: 0 if v < 24 else v)   # drop faint edge noise so glow/shadow follow the object
+    im.putalpha(a)
+    if pr.get("glow"):
+        g = a.filter(ImageFilter.MaxFilter(9)).filter(ImageFilter.GaussianBlur(22))
+        g = g.point(lambda v: int(min(255, v * pr.get("glow", 0.8))))
+        canvas.paste(COLORS.get(pr.get("glow_color", "lime"), LIME), (x, y), g)
+    sh = a.filter(ImageFilter.GaussianBlur(14)).point(lambda v: int(v * 0.7))
+    canvas.paste(INK, (x + 10, y + 14), sh)
+    canvas.paste(im, (x, y), im)
+    return canvas
+
+
 def background(bg, base):
     focus = tuple(bg.get("focus", [0.5, 0.4]))
     if bg.get("color"):
@@ -172,6 +197,8 @@ def build(spec, base):
                 draw_text(canvas, t)
         cut = cutout(os.path.join(base, s["photo"]), s.get("hide"))
         place(canvas, cut, s)
+    for pr in spec.get("props", []):
+        place_prop(canvas, pr, base)
     for t in front:
         f = draw_text(canvas, t)
         if spec.get("mark", True) and t is front[0]:

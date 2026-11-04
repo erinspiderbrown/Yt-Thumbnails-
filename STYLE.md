@@ -6,6 +6,10 @@ put text behind the person for depth and add supporting people (e.g. pixelated a
 SUSPENDED stamps). It's driven by a small JSON file per thumbnail; see
 `videos/002-coach-ped-suspensions/specs/` for three ready examples to copy.
 
+**AI assets rule:** AI may generate *backgrounds and props* (stadiums, pill bottles,
+documents, trophies) to place into the scene with `"props"` in the spec. Never generate or
+alter real people. Their real photos are cut out and left untouched.
+
 **Quick flat versions: `tools/signature_formats.py`.** Your three signature formats take the proven
 structure from your benchmark creators and give it your own look:
 

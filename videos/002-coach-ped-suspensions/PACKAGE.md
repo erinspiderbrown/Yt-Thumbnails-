@@ -1,6 +1,14 @@
 # 002: High school coach allegedly gave athletes PEDs, two athletes suspended
 
-## ✅ Current versions: PRO layered thumbnails (best so far)
+## ✅ FINAL: `pro-d.png` (AI-assisted scene)
+Real coach photo (cut out, untouched) + **AI-generated** stadium background and pill bottle/syringe
+prop (Higgsfield, z_image model, stored in `generated/`). Nobody's face or body is AI-generated.
+Title: **High School Coach Accused of Giving His Athletes PEDs, Now They're Suspended**
+A/B partner: `pro-b.png` ("WHO'S TO BLAME?").
+`pro-e.png` (athletes + prop) was too busy; kept for reference only.
+Rebuild: `python ../../tools/pro_thumbnail.py specs/pro-d.json`
+
+## Earlier: PRO layered thumbnails
 Made with `tools/pro_thumbnail.py`: the coach is cut out of his photo (local model, pixels untouched),
 the background is darkened, blurred and tinted, and he gets the signature lime outline so he pops.
 Same signature text and colours as before.

@@ -1,0 +1,11 @@
+{
+  "out": "../pro-d.png",
+  "background": {"photo": "../generated/stadium-night.png", "zoom": 1.0, "focus": [0.35,0.5], "blur": 3, "darken": 0.35,
+                 "desaturate": 0.2, "tint": [90,0,0], "tint_amount": 0.15, "vignette": 0.55},
+  "subjects": [
+    {"photo": "../photos/coach.jpg", "cx": 0.72, "bottom": 1.10, "height": 1.10, "outline": 5, "outline_color": "lime"}
+  ],
+  "props": [{"image": "../generated/pills-syringe-cutout.png", "cx": 0.24, "cy": 0.78, "width": 0.40, "rotate": 6, "glow": 0.9}],
+  "text": [{"text": "WHAT DID HE|*GIVE THEM?*", "box": [0.03,0.08,0.52,0.48], "max_size": 170}],
+  "tag": "ALLEGED"
+}
