@@ -30,6 +30,14 @@ turns it off).
 | Records / analysis | `--layout bottom` + `--clock` | `tools/examples/clock.png` |
 | Rivalry / comparison | `--layout split` + `--name1/--name2` | `tools/examples/split.png` |
 
+## Privacy: hiding faces (opt-in only)
+For stories about minors, accused people or anyone who shouldn't be identifiable,
+pixelate a face with `--hide cx,cy,rx,ry` (`--hide2`/`--hide3` for the other photos,
+fractions of the ORIGINAL photo). `--hide-mode blur` gives a soft blur instead of
+pixels. Nothing is hidden unless you ask. The `trio` layout (one main photo + two
+stacked panels with `--label2/--label3` stamps) is made for these stories. See
+`videos/002-coach-ped-suspensions/`.
+
 ## Text rules
 - 1–4 words. One highlighted word, the one that carries the emotion.
 - Thumbnail text should add to the title, not repeat it.

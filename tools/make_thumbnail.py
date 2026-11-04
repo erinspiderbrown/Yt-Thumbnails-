@@ -20,6 +20,10 @@ Quick examples
   # Rivalry / you vs them: two photos split by a slanted lane line
   python tools/make_thumbnail.py --photo a.jpg --photo2 b.jpg --layout split --text "WHO *WINS?*"
 
+  # Story with 3 people; hide minors' faces (fractions of the ORIGINAL photo)
+  python tools/make_thumbnail.py --layout trio --photo coach.jpg --photo2 a.jpg --photo3 b.jpg \
+      --hide2 0.49,0.29,0.12,0.11 --label2 SUSPENDED --label3 SUSPENDED --text "*ALLEGEDLY*"
+
   # Or keep the settings in a JSON file (keys = option names with underscores)
   python tools/make_thumbnail.py --spec videos/002-foo/thumb.json
 
@@ -53,9 +57,33 @@ ACCENTS = {
 
 
 # ---------------------------------------------------------------- photo
-def load_cover(path, box_w, box_h, focus=(0.5, 0.4)):
-    """Crop-to-fill. No colour, face or pixel edits, only crop + resize."""
+def hide_faces(im, regions, mode="pixel"):
+    """PRIVACY ONLY: pixelate (or blur) ellipses you list, e.g. minors' faces.
+    regions = ["cx,cy,rx,ry", ...] as fractions of the ORIGINAL photo."""
+    from PIL import ImageFilter
+    sw, sh = im.size
+    for reg in regions or []:
+        cx, cy, rx, ry = (float(v) for v in reg.split(","))
+        box = (int((cx - rx) * sw), int((cy - ry) * sh), int((cx + rx) * sw), int((cy + ry) * sh))
+        patch = im.crop(box)
+        if mode == "blur":
+            patch = patch.filter(ImageFilter.GaussianBlur(max(patch.size) / 6))
+        else:
+            block = max(6, max(patch.size) // 9)
+            small = patch.resize((max(1, patch.width // block), max(1, patch.height // block)), Image.BILINEAR)
+            patch = small.resize(patch.size, Image.NEAREST)
+        mask = Image.new("L", patch.size, 0)
+        ImageDraw.Draw(mask).ellipse((0, 0, patch.width - 1, patch.height - 1), fill=255)
+        im.paste(patch, box[:2], mask)
+    return im
+
+
+def load_cover(path, box_w, box_h, focus=(0.5, 0.4), hide=None, hide_mode="pixel"):
+    """Crop-to-fill. No colour, face or pixel edits, only crop + resize
+    (plus face hiding ONLY where you explicitly ask for it with --hide*)."""
     im = Image.open(path).convert("RGB")
+    if hide:
+        im = hide_faces(im, hide, hide_mode)
     sw, sh = im.size
     scale = max(box_w / sw, box_h / sh)
     nw, nh = math.ceil(sw * scale), math.ceil(sh * scale)
@@ -217,6 +245,20 @@ def draw_tag(canvas, tag, accent):
     return canvas
 
 
+def draw_panel_label(canvas, text, right_x, y, accent):
+    """Right-aligned stamp on a panel, e.g. 'SUSPENDED'."""
+    if not text:
+        return canvas
+    d = ImageDraw.Draw(canvas)
+    f = ImageFont.truetype(FONT_HEAD, 46)
+    b = f.getbbox(text.upper())
+    tw = b[2] - b[0]
+    x = right_x - tw - 30
+    parallelogram(d, x - 14, y, x + tw + 24, y + 58, fill=accent)
+    d.text((x - b[0], y + 6 - b[1] + 2), text.upper(), font=f, fill=INK)
+    return canvas
+
+
 def draw_names(canvas, left, right, accent):
     d = ImageDraw.Draw(canvas)
     f = ImageFont.truetype(FONT_HEAD, 46)
@@ -240,12 +282,33 @@ def build(o):
         accent = tuple(int(hx[i:i + 2], 16) for i in (0, 2, 4))
     focus = tuple(float(v) for v in o.focus.split(","))
 
-    if o.layout == "split":
+    if o.layout == "trio":
+        if not (o.photo2 and o.photo3):
+            sys.exit("--layout trio needs --photo2 and --photo3")
+        focus2 = tuple(float(v) for v in o.focus2.split(","))
+        focus3 = tuple(float(v) for v in o.focus3.split(","))
+        lw = int(W * 0.56)
+        off = H * SLANT / 2
+        main = load_cover(o.photo, lw + int(off) + 40, H, focus, o.hide, o.hide_mode)
+        rw = W - lw + int(off) + 40
+        top = load_cover(o.photo2, rw, H // 2, focus2, o.hide2, o.hide_mode)
+        bot = load_cover(o.photo3, rw, H // 2, focus3, o.hide3, o.hide_mode)
+        canvas = Image.new("RGB", (W, H), INK)
+        canvas.paste(top, (W - rw, 0))
+        canvas.paste(bot, (W - rw, H // 2))
+        mask = Image.new("L", main.size, 0)
+        ImageDraw.Draw(mask).polygon([(0, 0), (lw + off, 0), (lw - off, H), (0, H)], fill=255)
+        canvas.paste(main, (0, 0), mask)
+        d = ImageDraw.Draw(canvas)
+        d.rectangle((lw - off, H // 2 - 5, W, H // 2 + 5), fill=accent)
+        d.line([(lw + off, 0), (lw - off, H)], fill=accent, width=12)
+        text_where = "bottom"
+    elif o.layout == "split":
         if not o.photo2:
             sys.exit("--layout split needs --photo2")
         focus2 = tuple(float(v) for v in o.focus2.split(","))
-        a_half = load_cover(o.photo, W // 2 + 120, H, focus)
-        b_half = load_cover(o.photo2, W // 2 + 120, H, focus2)
+        a_half = load_cover(o.photo, W // 2 + 120, H, focus, o.hide, o.hide_mode)
+        b_half = load_cover(o.photo2, W // 2 + 120, H, focus2, o.hide2, o.hide_mode)
         canvas = Image.new("RGB", (W, H), INK)
         canvas.paste(a_half, (0, 0))
         # slanted divider: right photo overlaps on a diagonal
@@ -259,7 +322,7 @@ def build(o):
         d.line([(mid + off, 0), (mid - off, H)], fill=accent, width=14)
         text_where = "bottom"
     else:
-        canvas = load_cover(o.photo, W, H, focus)
+        canvas = load_cover(o.photo, W, H, focus, o.hide, o.hide_mode)
         text_where = o.layout  # top | bottom | left
 
     canvas = shade(canvas, text_where if o.text else "none", o.shade)
@@ -271,6 +334,9 @@ def build(o):
         draw_ring(canvas, cx, cy, r, accent)
     if o.layout == "split" and (o.name1 or o.name2):
         draw_names(canvas, o.name1, o.name2, accent)
+    if o.layout == "trio":
+        draw_panel_label(canvas, o.label2, W - 30, 22, accent)
+        draw_panel_label(canvas, o.label3, W - 30, H // 2 + 22, accent)
 
     if o.text:
         lines = parse_text(o.text)
@@ -278,6 +344,8 @@ def build(o):
             area, align = (44, 26, W * o.text_width, H * 0.52), "left"
         elif text_where == "bottom":
             area, align = (44, H * 0.50, W * o.text_width, H - 34), "bottom"
+            if o.layout == "trio":
+                area, align = (40, H * 0.48, W * 0.50, H - 112), "bottom"
             if o.layout == "split":
                 area, align = (60, H * 0.70, W - 60, H - 30), "center"
         else:  # left
@@ -302,7 +370,15 @@ def main(argv=None):
     p.add_argument("--photo2", help="second photo for --layout split")
     p.add_argument("--focus", default="0.5,0.4", help="crop centre as x,y fractions (0-1)")
     p.add_argument("--focus2", default="0.5,0.4")
-    p.add_argument("--layout", default="top", choices=["top", "bottom", "left", "split"])
+    p.add_argument("--photo3", help="third photo for --layout trio (bottom-right panel)")
+    p.add_argument("--focus3", default="0.5,0.4")
+    p.add_argument("--hide", action="append", help="PRIVACY: hide a face in photo 1, cx,cy,rx,ry fractions (repeatable)")
+    p.add_argument("--hide2", action="append", help="hide a face in photo 2")
+    p.add_argument("--hide3", action="append", help="hide a face in photo 3")
+    p.add_argument("--hide-mode", default="pixel", choices=["pixel", "blur"])
+    p.add_argument("--label2", help="trio: stamp on top-right panel, e.g. SUSPENDED")
+    p.add_argument("--label3", help="trio: stamp on bottom-right panel")
+    p.add_argument("--layout", default="top", choices=["top", "bottom", "left", "split", "trio"])
     p.add_argument("--text", default="", help='"LINE ONE|LINE *TWO*", | = new line, *x* = highlight')
     p.add_argument("--text-width", type=float, default=0.80, help="fraction of width text may use")
     p.add_argument("--accent", default="lime", help="lime|orange|cyan|gold or hex like #D4FF00")
