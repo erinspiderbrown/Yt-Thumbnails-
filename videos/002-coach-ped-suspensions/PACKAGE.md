@@ -1,26 +1,25 @@
 # 002: High school coach allegedly gave athletes PEDs, two athletes suspended
 
-Format: controversy / breaking news · long-form
+## ✅ Current versions: modelled directly on your benchmark creators' top drama/doping videos
+Plain real photo + plain white text, with no colour bars, cards or graphics. That's what their
+best-performing thumbnails actually look like.
 
-## ✅ FINAL
-- **Thumbnail:** `FINAL-thumbnail.png` (= v4, coach's face big, "WHAT DID HE GIVE THEM?", athletes as SUSPENDED cards)
-- A/B test partner: `thumb-v5.png` ("COACH ACCUSED")
+| File | Modelled on | Thumbnail | Pair with title |
+|---|---|---|---|
+| `fmt-trp.png` (**FINAL**, recommended) | TRP: "Abby Steiner Situation Is Crazy" (403K), "Erriyon Knighton Situation Keeps Getting Crazier" | THIS IS BAD... + curved arrow | **This High School PED Situation Is Crazy** |
+| `fmt-jumpman.png` (A/B partner) | Jumpman: "What The Enhanced Games Exposed About PEDs" (2.1M) | News-headline boxes | **What This High School PED Scandal Exposed About Youth Track** |
+| `fmt-finalleg.png` | The Final Leg: "THIS IS SERIOUS", "IS SHE HEALTHY?" | WHO'S TO BLAME? | **Is The Coach Really To Blame for This PED Scandal?** |
 
-### Why v1–v3 were replaced
-Three equal panels plus four text elements meant no focal point, faces too small at phone size,
-and lime text on a yellow shirt. v4/v5 follow what the outliers do: one big face (~50% of frame),
-2–4 huge words on the empty side, and the athletes as small supporting "evidence" cards
-where the coach is looking.
+Note: these show the coach only, as these creators use one subject. Say "accused/allegedly" in the
+title or first 30 seconds, and keep the athletes' faces hidden in the video itself.
 
-Rebuild v4:
+Rebuild (from this folder):
 ```bash
-python ../../tools/make_thumbnail.py --photo photos/coach.jpg --zoom 1.3 --focus 0.40,0.36 \
-  --layout left --text-width 0.52 --shade 0.85 --cards \
-  --photo2 photos/athlete-1.jpg --focus2 0.5,0.33 --hide2 0.49,0.29,0.12,0.115 \
-  --photo3 photos/athlete-2.jpg --focus3 0.5,0.35 --hide3 0.5,0.145,0.065,0.11 \
-  --text "WHAT DID HE|*GIVE THEM?*" --tag ALLEGED --out thumb-v4.png
+T=../../tools/creator_formats.py
+python $T trp --photo photos/coach.jpg --zoom 1.15 --focus 0.40,0.36 --text "THIS IS BAD..." --text-width 0.42 --arrow 0.30,0.22,0.47,0.40 --bend 0.3 --out fmt-trp.png
+python $T finalleg --photo photos/coach.jpg --zoom 1.25 --focus 0.30,0.38 --text "WHO'S|TO BLAME?" --side left --text-width 0.46 --out fmt-finalleg.png
+python $T jumpman --photo photos/coach.jpg --zoom 1.1 --focus 0.45,0.4 --headline "High school coach accused of giving athletes PEDs." --caption "Two of his athletes have been suspended." --out fmt-jumpman.png
 ```
-- **Title:** High School Coach Accused of Giving His Athletes PEDs, Now They're Suspended
 
 ## Earlier drafts (v1–v3, superseded)
 

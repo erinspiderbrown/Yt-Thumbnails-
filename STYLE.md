@@ -1,3 +1,11 @@
+# Thumbnail styles
+
+**For drama / controversy / doping videos, use `tools/creator_formats.py`** (TRP, Final Leg
+and Jumpman formats). Your benchmark creators' best drama thumbnails are plain photos +
+plain white text. See `videos/002-coach-ped-suspensions/`.
+
+The "Photo Finish" house style below is for analysis, record and rivalry videos.
+
 # House Style: "Photo Finish"
 
 Your own look, built on track itself. It takes the *lessons* from the creators you
