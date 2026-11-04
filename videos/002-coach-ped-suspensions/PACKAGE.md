@@ -2,6 +2,10 @@
 
 Format: controversy / breaking news · long-form
 
+## ✅ FINAL
+- **Thumbnail:** `FINAL-thumbnail.png` (= v2, "WHAT DID COACH GIVE THEM?" + ALLEGED tag)
+- **Title:** High School Coach Accused of Giving His Athletes PEDs, Now They're Suspended
+
 ## Thumbnails (all in house style, athletes' faces pixelated)
 | File | Text | When to use |
 |---|---|---|
