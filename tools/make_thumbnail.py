@@ -78,14 +78,14 @@ def hide_faces(im, regions, mode="pixel"):
     return im
 
 
-def load_cover(path, box_w, box_h, focus=(0.5, 0.4), hide=None, hide_mode="pixel"):
+def load_cover(path, box_w, box_h, focus=(0.5, 0.4), hide=None, hide_mode="pixel", zoom=1.0):
     """Crop-to-fill. No colour, face or pixel edits, only crop + resize
     (plus face hiding ONLY where you explicitly ask for it with --hide*)."""
     im = Image.open(path).convert("RGB")
     if hide:
         im = hide_faces(im, hide, hide_mode)
     sw, sh = im.size
-    scale = max(box_w / sw, box_h / sh)
+    scale = max(box_w / sw, box_h / sh) * max(1.0, zoom)
     nw, nh = math.ceil(sw * scale), math.ceil(sh * scale)
     im = im.resize((nw, nh), Image.LANCZOS)
     fx, fy = focus
@@ -232,13 +232,13 @@ def draw_clock(canvas, value, label, accent, pos="tr"):
     return canvas
 
 
-def draw_tag(canvas, tag, accent):
+def draw_tag(canvas, tag, accent, top=False):
     """Small brand tab, bottom-left. Same spot every video = recognisable."""
     d = ImageDraw.Draw(canvas)
     f = ImageFont.truetype(FONT_HEAD, 40)
     b = f.getbbox(tag.upper())
     tw = b[2] - b[0]
-    x0, y1 = 0, H - 28
+    x0, y1 = 0, (28 + 54) if top else H - 28
     y0 = y1 - 54
     parallelogram(d, x0 - 20, y0, x0 + tw + 56, y1, fill=accent)
     d.text((x0 + 22 - b[0], y0 + 6 - b[1] + 4), tag.upper(), font=f, fill=INK)
@@ -256,6 +256,36 @@ def draw_panel_label(canvas, text, right_x, y, accent):
     x = right_x - tw - 30
     parallelogram(d, x - 14, y, x + tw + 24, y + 58, fill=accent)
     d.text((x - b[0], y + 6 - b[1] + 2), text.upper(), font=f, fill=INK)
+    return canvas
+
+
+def draw_cards(canvas, o):
+    """'Evidence' cards: photo2/photo3 as small tilted prints with a stamp, bottom-left.
+    Supporting proof, not the main subject. Faces hidden via --hide2/--hide3."""
+    cw, ch = int(W * 0.15), int(H * 0.29)
+    stamp_col = (226, 28, 28)
+    specs = [(o.photo2, o.focus2, o.hide2, -5, 40), (o.photo3, o.focus3, o.hide3, 4, 40 + cw + 30)]
+    for path, foc, hide, angle, x in specs:
+        if not path:
+            continue
+        f = tuple(float(v) for v in foc.split(","))
+        photo = load_cover(path, cw, ch, f, hide, o.hide_mode)
+        b = 10
+        card = Image.new("RGB", (cw + 2 * b, ch + 2 * b + 46), WHITE)
+        card.paste(photo, (b, b))
+        d = ImageDraw.Draw(card)
+        d.rectangle((0, ch + 2 * b, card.width, card.height), fill=stamp_col)
+        fnt = ImageFont.truetype(FONT_HEAD, 40)
+        label = (o.card_label or "").upper()
+        tb = fnt.getbbox(label)
+        d.text(((card.width - (tb[2] - tb[0])) / 2 - tb[0], ch + 2 * b + 23 - (tb[1] + tb[3]) / 2),
+               label, font=fnt, fill=WHITE)
+        rot = card.convert("RGBA").rotate(angle, expand=True, resample=Image.BICUBIC)
+        shadow = Image.new("RGBA", rot.size, (0, 0, 0, 0))
+        shadow.putalpha(rot.split()[3].point(lambda a: int(a * 0.55)))
+        y = H - rot.height - 26
+        canvas.paste((0, 0, 0), (x + 8, y + 8), shadow.split()[3])
+        canvas.paste(rot, (x, y), rot)
     return canvas
 
 
@@ -322,7 +352,7 @@ def build(o):
         d.line([(mid + off, 0), (mid - off, H)], fill=accent, width=14)
         text_where = "bottom"
     else:
-        canvas = load_cover(o.photo, W, H, focus, o.hide, o.hide_mode)
+        canvas = load_cover(o.photo, W, H, focus, o.hide, o.hide_mode, o.zoom)
         text_where = o.layout  # top | bottom | left
 
     canvas = shade(canvas, text_where if o.text else "none", o.shade)
@@ -350,16 +380,20 @@ def build(o):
                 area, align = (60, H * 0.70, W - 60, H - 30), "center"
         else:  # left
             area, align = (44, 40, W * min(o.text_width, 0.58), H - 110), "left"
+            if o.cards:
+                area = (44, 104 if o.tag else 28, W * min(o.text_width, 0.58), H * 0.53)
         if align == "center":
             # centre block vertically at the bottom
             draw_headline(canvas, lines, area, accent, align="center_bottom")
         else:
             draw_headline(canvas, lines, area, accent, align=align)
 
+    if o.cards:
+        draw_cards(canvas, o)
     if o.clock:
         draw_clock(canvas, o.clock, o.clock_label, accent, o.clock_pos)
     if o.tag:
-        draw_tag(canvas, o.tag, accent)
+        draw_tag(canvas, o.tag, accent, top=bool(o.cards))
     return canvas
 
 
@@ -369,6 +403,9 @@ def main(argv=None):
     p.add_argument("--photo")
     p.add_argument("--photo2", help="second photo for --layout split")
     p.add_argument("--focus", default="0.5,0.4", help="crop centre as x,y fractions (0-1)")
+    p.add_argument("--zoom", type=float, default=1.0, help="zoom into photo 1 (1.0 = fit). Bigger face = better thumbnail")
+    p.add_argument("--cards", action="store_true", help="show photo2/photo3 as small 'evidence' cards bottom-left")
+    p.add_argument("--card-label", default="SUSPENDED", help="red strip text under each card")
     p.add_argument("--focus2", default="0.5,0.4")
     p.add_argument("--photo3", help="third photo for --layout trio (bottom-right panel)")
     p.add_argument("--focus3", default="0.5,0.4")

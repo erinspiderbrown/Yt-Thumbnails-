@@ -38,8 +38,14 @@ pixels. Nothing is hidden unless you ask. The `trio` layout (one main photo + tw
 stacked panels with `--label2/--label3` stamps) is made for these stories. See
 `videos/002-coach-ped-suspensions/`.
 
+## The #1 rule: one big face
+The main face should fill **40–60% of the frame height** (use `--zoom`). Text goes
+on the empty side, where the person is looking. Extra people become small
+`--cards` (evidence prints with a red stamp), never equal panels. Multi-panel
+collages read like a news page, not a moment.
+
 ## Text rules
-- 1–4 words. One highlighted word, the one that carries the emotion.
+- 2–4 words, as BIG as possible. One highlighted word, the one that carries the emotion.
 - Thumbnail text should add to the title, not repeat it.
 - Questions work great for takes: "TOO GOOD TO BE *TRUE?*", "*OVERRATED?*"
 

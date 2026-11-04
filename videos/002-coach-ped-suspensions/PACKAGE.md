@@ -3,8 +3,26 @@
 Format: controversy / breaking news · long-form
 
 ## ✅ FINAL
-- **Thumbnail:** `FINAL-thumbnail.png` (= v2, "WHAT DID COACH GIVE THEM?" + ALLEGED tag)
+- **Thumbnail:** `FINAL-thumbnail.png` (= v4, coach's face big, "WHAT DID HE GIVE THEM?", athletes as SUSPENDED cards)
+- A/B test partner: `thumb-v5.png` ("COACH ACCUSED")
+
+### Why v1–v3 were replaced
+Three equal panels plus four text elements meant no focal point, faces too small at phone size,
+and lime text on a yellow shirt. v4/v5 follow what the outliers do: one big face (~50% of frame),
+2–4 huge words on the empty side, and the athletes as small supporting "evidence" cards
+where the coach is looking.
+
+Rebuild v4:
+```bash
+python ../../tools/make_thumbnail.py --photo photos/coach.jpg --zoom 1.3 --focus 0.40,0.36 \
+  --layout left --text-width 0.52 --shade 0.85 --cards \
+  --photo2 photos/athlete-1.jpg --focus2 0.5,0.33 --hide2 0.49,0.29,0.12,0.115 \
+  --photo3 photos/athlete-2.jpg --focus3 0.5,0.35 --hide3 0.5,0.145,0.065,0.11 \
+  --text "WHAT DID HE|*GIVE THEM?*" --tag ALLEGED --out thumb-v4.png
+```
 - **Title:** High School Coach Accused of Giving His Athletes PEDs, Now They're Suspended
+
+## Earlier drafts (v1–v3, superseded)
 
 ## Thumbnails (all in house style, athletes' faces pixelated)
 | File | Text | When to use |
