@@ -1,6 +1,23 @@
 # 002: High school coach allegedly gave athletes PEDs, two athletes suspended
 
-## ✅ Current versions: modelled directly on your benchmark creators' top drama/doping videos
+## ✅ Current versions: YOUR signature formats
+Same proven structure as your benchmark creators, with your own look: slanted Barlow font, hard
+shadow, lime key word, lime "//" mark, tapered lime arrow, black/lime news captions.
+
+| File | Structure borrowed from | Pair with title |
+|---|---|---|
+| `sig-situation.png` (**FINAL**) | TRP | **This High School PED Situation Is Crazy** |
+| `sig-report.png` (A/B partner) | Jumpman | **What This High School PED Scandal Exposed About Youth Track** |
+| `sig-statement.png` | The Final Leg | **Is The Coach Really To Blame for This PED Scandal?** |
+
+```bash
+T=../../tools/signature_formats.py
+python $T situation --photo photos/coach.jpg --zoom 1.15 --focus 0.40,0.36 --text "THIS IS *BAD...*" --text-width 0.44 --arrow 0.30,0.25,0.46,0.40 --out sig-situation.png
+python $T statement --photo photos/coach.jpg --zoom 1.25 --focus 0.30,0.38 --text "WHO'S|TO|BLAME?" --side left --text-width 0.45 --out sig-statement.png
+python $T report --photo photos/coach.jpg --zoom 1.1 --focus 0.45,0.4 --headline "HS coach accused of giving athletes PEDs" --caption "Two of his athletes suspended" --out sig-report.png
+```
+
+## Reference only: straight creator-format copies (don't publish these)
 Plain real photo + plain white text, with no colour bars, cards or graphics. That's what their
 best-performing thumbnails actually look like.
 

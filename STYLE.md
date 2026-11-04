@@ -1,8 +1,17 @@
 # Thumbnail styles
 
-**For drama / controversy / doping videos, use `tools/creator_formats.py`** (TRP, Final Leg
-and Jumpman formats). Your benchmark creators' best drama thumbnails are plain photos +
-plain white text. See `videos/002-coach-ped-suspensions/`.
+**Default: `tools/signature_formats.py`.** Your three signature formats take the proven
+structure from your benchmark creators and give it your own look:
+
+| Format | Structure from | Use for |
+|---|---|---|
+| `situation` | TRP | breaking drama: 2–4 words top-left, key word lime, tapered lime arrow |
+| `statement` | The Final Leg | your take/opinion: huge stacked slanted text beside the person, last word lime |
+| `report` | Jumpman | allegations / news: black captions with lime edge + "REPORTED" tag |
+
+Shared signature: Barlow Condensed Black Italic, hard (not blurry) shadow, ONE accent
+colour (lane lime), the lime "//" mark. Plain real photo, no clutter.
+`tools/creator_formats.py` makes straight copies of their formats, for study only.
 
 The "Photo Finish" house style below is for analysis, record and rivalry videos.
 
